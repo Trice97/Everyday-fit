@@ -1,8 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
-from app.schemas.user import UserCreate, UserResponse, UserUpdate
 from app.services import user_service
+from app.schemas.user import UserCreate, UserResponse, UserUpdate, PasswordChange
+from app.dependencies.auth import get_current_user
+from app.models.user import User
+
 
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -50,3 +53,16 @@ def update_user(user_id: int, updates: UserUpdate, db: Session = Depends(get_db)
 @router.delete("/{user_id}")
 def delete_user(user_id: int, db: Session = Depends(get_db)):
     return user_service.delete_user(db, user_id)
+
+
+# ==========================================
+# CHANGE PASSWORD
+# ==========================================
+@router.put("/me/password")
+def change_password(
+    data: PasswordChange,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Modification du mot de passe de l'utilisateur connecté"""
+    return user_service.change_password(db, current_user.id, data)

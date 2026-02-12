@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from app.models.user import User
-from app.schemas.user import UserCreate, UserUpdate
+from app.schemas.user import UserCreate, UserUpdate, PasswordChange
 from passlib.context import CryptContext
 
 
@@ -96,3 +96,21 @@ def delete_user(db: Session, user_id: int):
     db.delete(user)
     db.commit()
     return {"message": "Utilisateur supprimé"}
+
+
+def change_password(db: Session, user_id: int, data: PasswordChange):
+    """Modification du mot de passe d'un utilisateur connecté"""
+    user = get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    # Vérifier que l'ancien mot de passe est correct
+    if not verify_password(data.current_password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Mot de passe actuel incorrect")
+    # Vérifier que le nouveau mot de passe et la confirmation correspondent
+    if data.new_password != data.confirm_password:
+        raise HTTPException(status_code=400, detail="Les mots de passe ne correspondent pas")
+    # Hasher et sauvegarder le nouveau mot de passe
+    user.hashed_password = get_password_hash(data.new_password)
+    db.commit()
+    db.refresh(user)
+    return {"message": "Mot de passe modifié avec succès"}
