@@ -97,13 +97,17 @@ class PasswordChange(BaseModel):
     )
 
 
-
-# class Token(baseModel):
-#   """Réponse après le login"""
-#    access_token: str
-#    token_type: str = "bearer"
-
-# class tokendata(Basemodel):
-#    """Données contenues dans le token"""
-#    user_id: Optional[int] = None
-#    email:Optional[str] = None
+# ==========================================
+# USER STATS
+# ==========================================
+class UserStats(BaseModel):
+    """Statiques d'un utilisateur"""
+    username: str
+    total_points: int
+    total_workouts: int
+    completed_workouts: int
+    completion_rate: float
+    
+    class Config:
+        from_attributes = True
+    

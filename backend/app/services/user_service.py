@@ -3,7 +3,7 @@ from fastapi import HTTPException, status
 from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate, PasswordChange
 from passlib.context import CryptContext
-
+from app.models.workout import Workout
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -114,3 +114,24 @@ def change_password(db: Session, user_id: int, data: PasswordChange):
     db.commit()
     db.refresh(user)
     return {"message": "Mot de passe modifié avec succès"}
+
+def get_user_stats(db: Session, user_id: int):
+    """Récupère les statistiques d'un utilisateur"""
+    user = get_user_by_id(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    
+    total_workouts = db.query(Workout).filter(Workout.user_id == user_id).count()
+    completed_workouts = db.query(Workout).filter(
+        Workout.user_id == user_id, Workout.is_completed == True
+    ).count()
+    
+    completion_rate = (completed_workouts / total_workouts * 100) if total_workouts > 0 else 0.0
+    
+    return {
+        "username": user.username,
+        "total_points": user.total_points,
+        "total_workouts": total_workouts,
+        "completed_workouts": completed_workouts,
+        "completion_rate": round(completion_rate, 2)
+    }

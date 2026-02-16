@@ -2,10 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import SessionLocal
 from app.services import user_service
-from app.schemas.user import UserCreate, UserResponse, UserUpdate, PasswordChange
 from app.dependencies.auth import get_current_user
 from app.models.user import User
-
+from app.schemas.user import UserCreate, UserResponse, UserUpdate, PasswordChange, UserStats
 
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -66,3 +65,14 @@ def change_password(
 ):
     """Modification du mot de passe de l'utilisateur connecté"""
     return user_service.change_password(db, current_user.id, data)
+
+# ==========================================
+# USER STATS
+# ==========================================
+@router.get("/me/stats", response_model=UserStats)
+def get_my_stats(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Récupère les statistiques de l'utilisateur connecté"""
+    return user_service.get_user_stats(db, current_user.id)
