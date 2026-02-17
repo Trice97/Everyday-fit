@@ -55,3 +55,27 @@ def decode_access_token(token: str) -> dict:
             detail="Token invalide ou expiré",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+def create_password_reset_token(email: str) -> str:
+    """Crée un token de réinitialisation de mot de passe (valide 30 min)"""
+    expire = datetime.utcnow() + timedelta(minutes=30)
+    to_encode = {"sub": email, "exp": expire, "type": "password_reset"}
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+def verify_password_reset_token(token: str) -> str:
+    """Vérifie un token de réinitialisation et retourne l'email"""
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        token_type: str = payload.get("type")
+        if email is None or token_type != "password_reset":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token invalide"
+            )
+        return email
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token invalide ou expiré"
+        )

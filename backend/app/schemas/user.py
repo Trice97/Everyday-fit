@@ -110,4 +110,21 @@ class UserStats(BaseModel):
     
     class Config:
         from_attributes = True
-    
+
+
+# ==========================================
+# PASSWORD RESET
+# ==========================================
+class PasswordResetRequest(BaseModel):
+    """Demande de réinitialisation du mot de passe"""
+    email: EmailStr
+
+class PasswordReset(BaseModel):
+    """Réinitialisation du mot de passe avec token"""
+    token: str
+    new_password: constr(min_length=8, max_length=20) = Field(
+        ..., description="Nouveau mot de passe (8 à 20 caractères)"
+    )
+    confirm_password: str = Field(
+        ..., description="Confirmation du nouveau mot de passe"
+    )
