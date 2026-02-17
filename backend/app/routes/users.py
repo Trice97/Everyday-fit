@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.database import SessionLocal
+from app.dependencies.database import get_db
 from app.services import user_service
 from app.dependencies.auth import get_current_user
 from app.models.user import User
@@ -8,15 +8,6 @@ from app.schemas.user import UserCreate, UserResponse, UserUpdate, PasswordChang
 
 
 router = APIRouter(prefix="/users", tags=["Users"])
-
-
-# dependance pour obtenir la Session DB
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 # ==========================================
