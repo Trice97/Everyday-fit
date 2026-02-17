@@ -74,3 +74,17 @@ class WorkoutResponse(BaseModel):
 
     class Config:
         from_attributes = True
+        
+
+# ==========================================
+# WORKOUT HISTORY
+# ==========================================
+class WorkoutHistory(BaseModel):
+    """Liste des workouts d'un utilisateur avec filtres"""
+    workouts: List[WorkoutResponse]
+    total: int
+    completed: int
+    pending: int
+
+    class Config:
+        from_attributes = True

@@ -112,3 +112,27 @@ def delete_workout(db: Session, workout_id: int):
     db.delete(workout)
     db.commit()
     return {"message": "Workout supprimé avec succès"}
+
+# ==========================================
+# WORKOUT HISTORY
+# ==========================================
+def get_user_workout_history(db: Session, user_id: int, completed_only: bool = False):
+    """Récupère l'historique des workouts d'un utilisateur"""
+    query = db.query(Workout).filter(Workout.user_id == user_id)
+    
+    if completed_only:
+        query = query.filter(Workout.is_completed == True)
+    
+    workouts = query.order_by(Workout.created_at.desc()).all()
+    
+    total = len(workouts)
+    completed = sum(1 for w in workouts if w.is_completed)
+    pending = total - completed
+    
+    return {
+        "workouts": workouts,
+        "total": total,
+        "completed": completed,
+        "pending": pending
+    }
+
