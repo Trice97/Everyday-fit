@@ -27,5 +27,68 @@
             </div>    
         </div>    
     </section>
-</body>
-</html>
+
+    <!-- Formulaire inscription (caché au départ) -->
+    <section id="registerForm" class="form-section hidden">
+        <div class="container">
+            <div class="form-container">
+                <h2 class="form-title">Inscris-toi, prendre soin de son physique c'est gratuit ici 💪</h2>
+                <form id="formRegister">
+                    <input type="text" id="username" class="form-input" placeholder="Nom d'utilisateur" required>
+                    <input type="email" id="email" class="form-input" placeholder="Email" required>
+                    <input type="password" id="password" class="form-input" placeholder="Mot de passe (8-20 caractères)" required>
+                    <button type="submit" class="btn-hero">Créer mon compte</button>
+                </form>
+                <p class="form-link">Déjà un compte ? <a href="#" id="linkLogin">Connecte-toi</a></p>
+            </div>
+        </div>
+    </section>
+    <!-- Formulaire connexion (caché au départ) -->
+    <section id="loginForm" class="form-section hidden">
+        <div class="container">
+            <div class="form-container">
+                <h2 class="form-title">Connexion</h2>
+                <form id="formLogin">
+                    <input type="email" id="loginEmail" class="form-input" placeholder="Email" required>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="Mot de passe" required>
+                    <button type="submit" class="btn-hero">Se connecter</button>
+                </form>
+                <p class="form-link">Pas encore de compte ? <a href="#" id="linkRegister">Inscris-toi</a></p>
+            </div>
+        </div>
+    </section>
+    <script>
+        // récupération des éléments
+        const btnMotivated = document.getElementById('btnMotivated');
+        const btnLazy = document.getElementById('btnLazy');
+        const loginHero = document.querySelector('.login-hero');
+        const linkLogin = document.getElementById('linkLogin');
+        const registerForm = document.getElementById('registerForm')
+        const loginFormSection = document.getElementById('loginForm');
+        const linkRegister = document.getElementById('linkRegister');
+
+     // Clic sur "let's get FIT"
+    btnMotivated.addEventListener('click', () => {
+        loginHero.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+    });
+    
+    // Lien "Connecte-toi"
+    linkLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        registerForm.classList.add('hidden');
+        loginFormSection.classList.remove('hidden');
+    });
+    
+    // Lien "Inscris-toi"
+    linkRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginFormSection.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+    });
+    
+    // Clic sur "Flemme"
+    btnLazy.addEventListener('click', () => {
+        alert('Papa Swolio est deg... 😤 Allez, bouge-toi !');
+    });
+</script>
