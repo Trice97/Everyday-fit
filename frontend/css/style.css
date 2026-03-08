@@ -365,3 +365,153 @@ body {
 .hidden {
     display: none;
 }
+/* Dashboard - Stats Section */
+.stats-section {
+    padding: 3rem 0;
+    background-color: #1e293b;
+}
+
+.stats-cards {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background-color: #334155;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    min-width: 200px;
+    border: 2px solid #475569;
+}
+
+.stat-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #60a5fa;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: #cbd5e1;
+    font-size: 1rem;
+}
+
+/* Dashboard - Workouts Section */
+.workouts-section {
+    padding: 3rem 0;
+    background-color: #111827;
+}
+
+.btn-generate {
+    display: block;
+    margin: 2rem auto;
+    background-color: #ef4444;
+    color: white;
+    padding: 1.5rem 3rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-generate:hover {
+    background-color: #dc2626;
+    transform: scale(1.05);
+}
+
+.workouts-list {
+    margin-top: 2rem;
+}
+
+.no-workouts {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    padding: 2rem;
+}
+
+/* Dashboard - DLC Section */
+.dlc-section {
+    padding: 3rem 0;
+    background-color: #1e293b;
+}
+
+.dlc-cards {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.dlc-card {
+    background-color: #334155;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    min-width: 250px;
+    max-width: 300px;
+    border: 2px solid #475569;
+    position: relative;
+}
+
+.dlc-active {
+    border-color: #10b981;
+    background-color: #064e3b;
+}
+
+.dlc-locked {
+    opacity: 0.6;
+    filter: grayscale(50%);
+}
+
+.dlc-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.dlc-active .dlc-badge {
+    background-color: #10b981;
+    color: white;
+}
+
+.dlc-locked .dlc-badge {
+    background-color: #6b7280;
+    color: white;
+}
+
+.dlc-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 2rem 0 1rem 0;
+    color: #60a5fa;
+}
+
+.dlc-description {
+    color: #cbd5e1;
+    line-height: 1.6;
+}
+
+/* Bouton déconnexion */
+.btn-logout {
+    color: #ef4444 !important;
+    font-weight: bold;
+}
+
+.btn-logout:hover {
+    color: #dc2626 !important;
+}
