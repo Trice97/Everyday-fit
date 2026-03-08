@@ -58,7 +58,7 @@
         </div>
     </section>
     <script>
-        // récupération des éléments
+        /*//récupération des éléments
         const btnMotivated = document.getElementById('btnMotivated');
         const btnLazy = document.getElementById('btnLazy');
         const loginHero = document.querySelector('.login-hero');
@@ -90,5 +90,95 @@
     // Clic sur "Flemme"
     btnLazy.addEventListener('click', () => {
         alert('Papa Swolio est deg... 😤 Allez, bouge-toi !');
+    });*/
+    //Récupération des éléments
+    const btnMotivated = document.getElementById('btnMotivated');
+    const btnLazy = document.getElementById('btnLazy');
+    const loginHero = document.querySelector('.login-hero');
+    const registerForm = document.getElementById('registerForm');
+    const loginFormSection = document.getElementById('loginForm');
+    const linkLogin = document.getElementById('linkLogin');
+    const linkRegister = document.getElementById('linkRegister');
+    
+    const formRegister = document.getElementById('formRegister');
+    const formLogin = document.getElementById('formLogin');
+
+    // Clic sur "Let's get FIT"
+    btnMotivated.addEventListener('click', () => {
+        loginHero.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+    });
+
+    // Clic sur "Flemme"
+    btnLazy.addEventListener('click', () => {
+        alert('Papa Swolio est déçu... 😤 Allez, bouge-toi !');
+    });
+
+    // Lien "Connecte-toi"
+    linkLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        registerForm.classList.add('hidden');
+        loginFormSection.classList.remove('hidden');
+    });
+
+    // Lien "Inscris-toi"
+    linkRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginFormSection.classList.add('hidden');
+        registerForm.classList.remove('hidden');
+    });
+
+    // INSCRIPTION
+    formRegister.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+            const response = await fetch('http://localhost:8001/api/users/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+
+            if (response.ok) {
+                alert('Compte créé ! Connecte-toi maintenant.');
+                registerForm.classList.add('hidden');
+                loginFormSection.classList.remove('hidden');
+            } else {
+                const error = await response.json();
+                alert('Erreur : ' + (error.detail || 'Inscription échouée'));
+            }
+        } catch (err) {
+            alert('Erreur réseau. Vérifie que le backend tourne !');
+        }
+    });
+
+    // CONNEXION
+    formLogin.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        try {
+            const response = await fetch('http://localhost:8001/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.access_token);
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Email ou mot de passe incorrect');
+            }
+        } catch (err) {
+            alert('Erreur réseau. Vérifie que le backend tourne !');
+        }
     });
 </script>

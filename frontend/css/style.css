@@ -515,3 +515,142 @@ body {
 .btn-logout:hover {
     color: #dc2626 !important;
 }
+/* Workout Page */
+.workout-section {
+    min-height: 100vh;
+    padding: 4rem 0;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+.workout-subtitle {
+    text-align: center;
+    color: #cbd5e1;
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+}
+
+.exercises-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.exercise-card {
+    background-color: #334155;
+    padding: 2rem;
+    border-radius: 15px;
+    border: 2px solid #475569;
+    transition: all 0.5s ease;
+    position: relative;
+}
+
+/* Exercice verrouillé (grisé) */
+.exercise-locked {
+    opacity: 0.5;
+    filter: grayscale(70%);
+    transform: scale(0.95);
+}
+
+/* Exercice actif (zoomé) */
+.exercise-active {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+    border: 3px solid #ef4444;
+    background-color: #1e293b;
+}
+
+/* Exercice complété (vert) */
+.exercise-completed {
+    transform: scale(0.95);
+    opacity: 0.8;
+    background-color: #064e3b;
+    border: 2px solid #10b981;
+}
+
+.exercise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.exercise-number {
+    background-color: #ef4444;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.exercise-completed .exercise-number {
+    background-color: #10b981;
+}
+
+.exercise-status {
+    font-size: 1.5rem;
+}
+
+.exercise-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #60a5fa;
+    margin-bottom: 1rem;
+}
+
+.exercise-details {
+    color: #cbd5e1;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-exercise-done {
+    width: 100%;
+    padding: 1rem;
+    background-color: #10b981;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-exercise-done:hover {
+    background-color: #059669;
+    transform: scale(1.05);
+}
+
+.btn-exercise-done:disabled {
+    background-color: #6b7280;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Bouton final */
+.btn-complete {
+    display: block;
+    margin: 3rem auto 0;
+    padding: 1.5rem 3rem;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 30px rgba(239, 68, 68, 0.4);
+}
+
+.btn-complete:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 40px rgba(239, 68, 68, 0.6);
+}
