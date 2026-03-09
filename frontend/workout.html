@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout - Everyday Fit</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1 class="logo"><a href="index.html" style="color:white; text-decoration: none;">Everyday Fit</a></h1>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Retour Dashboard</a></li>
+            </ul>    
+        </div>
+    </nav>
+    
+    <section class="workout-section">
+        <div class="container">
+            <h2 class="section-title" id="workoutTitle">Ton workout du jour</h2>
+            <p class="workout-subtitle">Complète les 3 exercices pour gagner 100 points 🔥</p>
+        
+            <div id="exercisesContainer" class="exercises-container"></div>
+        
+            <button id="btnComplete" class="btn-complete hidden">
+                🔥 WORKOUT TERMINÉ ! +100 POINTS 🔥
+            </button>
+        </div>
+    </section>
+
+    <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'login.html';
+
+    const params = new URLSearchParams(window.location.search);
+    const workoutId = params.get('id');
+    if (!workoutId) {
+        alert('Aucun workout trouvé');
+        window.location.href = 'dashboard.html';
+    }
+
+    const exercisesContainer = document.getElementById('exercisesContainer');
+    const btnComplete = document.getElementById('btnComplete');
+    let exercises = [];
+    let currentExercise = 0;
+
+    async function loadWorkout() {
+        try {
+            const response = await fetch(`http://localhost:8001/api/workouts/${workoutId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const workout = await response.json();
+                exercises = workout.exercises || [];
+                renderExercises();
+            } else {
+                alert('Impossible de charger le workout');
+                window.location.href = 'dashboard.html';
+            }
+        } catch (err) {
+            alert('Erreur réseau');
+            window.location.href = 'dashboard.html';
+        }
+    }
+
+    function renderExercises() {
+        exercisesContainer.innerHTML = exercises.map((ex, index) => {
+            const isActive = index === currentExercise;
+            const isCompleted = index < currentExercise;
+            const isLocked = index > currentExercise;
+            let className = 'exercise-card';
+            if (isActive) className += ' exercise-active';
+            if (isCompleted) className += ' exercise-completed';
+            if (isLocked) className += ' exercise-locked';
+            const statusIcon = isCompleted ? '✅' : isLocked ? '🔒' : '💪';
+            const details = ex.reps ? `${ex.reps} répétitions` : `${ex.duration} secondes`;
+            return `
+                <div class="${className}">
+                    <div class="exercise-header">
+                        <div class="exercise-number">${index + 1}</div>
+                        <div class="exercise-status">${statusIcon}</div>
+                    </div>
+                    <h3 class="exercise-name">${ex.name}</h3>
+                    <p class="exercise-details">${details}</p>
+                    ${isActive ? `<button class="btn-exercise-done" onclick="completeExercise()">✓ Terminé</button>` : ''}
+                    ${isCompleted ? `<p style="color: #10b981; font-weight: bold;">Complété ✓</p>` : ''}
+                    ${isLocked ? `<p style="color: #6b7280;">Verrouillé 🔒</p>` : ''}
+                </div>
+            `;
+        }).join('');
+    }
+
+    function completeExercise() {
+        currentExercise++;
+        if (currentExercise >= exercises.length) {
+            btnComplete.classList.remove('hidden');
+        }
+        renderExercises();
+    }
+
+    btnComplete.addEventListener('click', async () => {
+        try {
+            const response = await fetch(`http://localhost:8001/api/workouts/${workoutId}/complete`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                alert('🔥 WORKOUT TERMINÉ ! +100 POINTS 🔥');
+                window.location.href = 'dashboard.html';
+            } else {
+                alert('Erreur lors de la validation');
+            }
+        } catch (err) {
+            alert('Erreur réseau');
+        }
+    });
+
+    loadWorkout();
+    </script>
+</body>
+</html>
