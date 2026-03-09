@@ -12,11 +12,13 @@ router = APIRouter(prefix="/workouts", tags=["Workouts"])
 # =============================================
 # CREATE - Génération automatique d’un workout
 # ===========================================
-@router.post("/generate/{user_id}", response_model=WorkoutResponse)
-def generate_workout(user_id: int, db: Session = Depends(get_db)):
-    """genere un nouvelk entrainemenr pour l'utilisateur"""
-
-    return workout_service.generate_workout(db, user_id)
+@router.post("/generate", response_model=WorkoutResponse)
+def generate_workout(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """genere un nouvel entrainement pour l'utilisateur"""
+    return workout_service.generate_workout(db, current_user.id)
 
 
 # ==========================================
