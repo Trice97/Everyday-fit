@@ -17,6 +17,17 @@ router = APIRouter(prefix="/users", tags=["Users"])
 def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
     return user_service.create_user(db, user_data)
 
+# ==========================================
+# USER STATS
+# ==========================================
+@router.get("/me/stats", response_model=UserStats)
+def get_my_stats(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Récupère les statistiques de l'utilisateur connecté"""
+    return user_service.get_user_stats(db, current_user.id)
+
 
 # ==========================================
 # READ - Get user by ID
@@ -57,13 +68,3 @@ def change_password(
     """Modification du mot de passe de l'utilisateur connecté"""
     return user_service.change_password(db, current_user.id, data)
 
-# ==========================================
-# USER STATS
-# ==========================================
-@router.get("/me/stats", response_model=UserStats)
-def get_my_stats(
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    """Récupère les statistiques de l'utilisateur connecté"""
-    return user_service.get_user_stats(db, current_user.id)
