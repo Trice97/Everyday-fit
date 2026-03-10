@@ -9,9 +9,7 @@
 <body>
     <nav class="navbar">
         <div class="container">
-            <h1 class="logo">
-                <a href="index.html" style="color:white; text-decoration: none;">Everyday Fit</a>
-            </h1>
+            <h1 class="logo"><a href="index.html" style="color:white; text-decoration: none;">Everyday Fit</a></h1>
             <ul class="nav-links">
                 <li><a href="dashboard.html">Dashboard</a></li>
                 <li><a href="#" id="btnLogout" class="btn-logout">Déconnexion</a></li>
@@ -19,168 +17,231 @@
         </div>
     </nav>
 
-    <section class="stats-section">
-        <div class="container">
-            <h2 class="section-title">Mes statistiques</h2>
-            <div class="stats-cards">
-                <div class="stat-card">
-                    <div class="stat-icon">💪</div>
-                    <h3 class="stat-value" id="totalPoints">0</h3>
-                    <p class="stat-label">Points totaux</p>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">🏋️</div>
-                    <h3 class="stat-value" id="totalWorkouts">0</h3>
-                    <p class="stat-label">Workouts complétés</p>
-                </div>
-
-                <div class="stat-card">
-                    <div class="stat-icon">📈</div>
-                    <h3 class="stat-value" id="successRate">0%</h3>
-                    <p class="stat-label">Taux de réussite</p>
-                </div>
+    <!-- Stats compactes -->
+    <section class="stats-bar-section">
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span>💪</span>
+                <span id="totalPoints">0</span>
+                <span class="stat-label">pts</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span>🏋️</span>
+                <span id="totalWorkouts">0</span>
+                <span class="stat-label">complétés</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <span>📈</span>
+                <span id="successRate">0</span>
+                <span class="stat-label">% réussite</span>
             </div>
         </div>
     </section>
 
-    <section class="workouts-section">
-        <div class="container">
-            <h2 class="section-title">Mes derniers workouts</h2>
+    <!-- Carrousel éditions -->
+    <section class="editions-section">
+        <h2 class="section-title">Choisis ton édition</h2>
+        <div class="carousel-wrapper">
+            <button class="carousel-btn" id="prevBtn">&#8249;</button>
+            <div class="carousel-viewport">
+                <div class="carousel-track" id="carouselTrack">
 
-            <button id="btnGenerate" class="btn-generate">
-                Générer un nouveau workout 🔥
+                    <div class="edition-card edition-active">
+                        <div class="edition-badge">✅ ACTIF</div>
+                        <h3 class="edition-title">Bodyweight Edition</h3>
+                        <p class="edition-desc">Exercices au poids du corps, sans matériel, à domicile.</p>
+                    </div>
+
+                    <div class="edition-card edition-locked">
+                        <div class="edition-badge">🔒 COMING SOON</div>
+                        <h3 class="edition-title">Salle / Equipement</h3>
+                        <p class="edition-desc">Machines, haltères, barres, programme complet gym.</p>
+                    </div>
+
+                    <div class="edition-card edition-locked">
+                        <div class="edition-badge">🔒 COMING SOON</div>
+                        <h3 class="edition-title">Bodyweight Competitive</h3>
+                        <p class="edition-desc">Jeux compétitifs entre utilisateurs.</p>
+                    </div>
+
+                    <div class="edition-card edition-locked">
+                        <div class="edition-badge">🔒 COMING SOON</div>
+                        <h3 class="edition-title">UNO Fit Edition</h3>
+                        <p class="edition-desc">Jeu compétitif inspiré du UNO.</p>
+                    </div>
+
+                </div>
+            </div>
+            <button class="carousel-btn" id="nextBtn">&#8250;</button>
+        </div>
+
+        <div class="carousel-dots" id="carouselDots"></div>
+
+        <button id="btnGenerate" class="btn-generate hidden">
+            Générer le workout du jour 🔥
+        </button>
+        <p id="lockedMsg" class="locked-msg hidden">🔒 Cette édition n'est pas encore disponible</p>
+    </section>
+
+    <!-- Historique -->
+    <section class="history-section">
+        <div class="container-history">
+            <button id="btnHistory" class="btn-history">
+                <span>📋 Mes trainings complétés</span>
+                <span id="historyArrow">▼</span>
             </button>
-        
-            <div id="workoutsList" class="workouts-list">
-                <p class="no-workouts">Aucun workout pour le moment. Génère ton premier training maintenant!</p>
-            </div>    
-        </div>
-    </section>
-
-    <section class="dlc-section">
-        <div class="container">
-            <h2 class="section-title">Editions disponibles</h2>
-            
-            <div class="dlc-cards">
-                <div class="dlc-card dlc-active">
-                    <div class="dlc-badge">✅ ACTIF</div>
-                    <h3 class="dlc-title">Bodyweight Edition</h3>
-                    <p class="dlc-description">Exercices au poids du corps, sans matériel, à domicile.</p>    
-                </div>
-
-                <div class="dlc-card dlc-locked">
-                    <div class="dlc-badge">🔒 COMING SOON</div>
-                    <h3 class="dlc-title">Salle/Equipement</h3>
-                    <p class="dlc-description">Machines, haltères, barres, programme complet gym.</p>
-                </div>
-
-                <div class="dlc-card dlc-locked">
-                    <div class="dlc-badge">🔒 COMING SOON</div>
-                    <h3 class="dlc-title">Bodyweight competitive game</h3>
-                    <p class="dlc-description">Competitive games among users</p>
-                </div>
-
-                <div class="dlc-card dlc-locked">
-                    <div class="dlc-badge">🔒 COMING SOON</div>
-                    <h3 class="dlc-title">Bodyweight game UNO inspired</h3>
-                    <p class="dlc-description">Competitive games among users</p>
-                </div>
-            </div>
+            <div id="historyList" class="history-list hidden"></div>
         </div>
     </section>
 
     <script>
-        // Vérifier token au chargement
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = 'login.html';
-        }
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'login.html';
 
-        // Récupérer les éléments
-        const btnLogout = document.getElementById('btnLogout');
-        const btnGenerate = document.getElementById('btnGenerate');
-        const totalPoints = document.getElementById('totalPoints');
-        const totalWorkouts = document.getElementById('totalWorkouts');
-        const successRate = document.getElementById('successRate');
-        const workoutsList = document.getElementById('workoutsList');
-
-        // Charger les stats
-        async function loadStats() {
-            try {
-                const response = await fetch('http://localhost:8001/api/users/me/stats', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    totalPoints.textContent = data.total_points || 0;
-                    totalWorkouts.textContent = data.completed_workouts || 0;
-                    successRate.textContent = (data.completion_rate || 0) + '%';
-                }
-            } catch (err) {
-                console.error('Erreur stats:', err);
+    // === STATS ===
+    async function loadStats() {
+        try {
+            const response = await fetch('http://localhost:8001/api/users/me/stats', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('totalPoints').textContent = data.total_points || 0;
+                document.getElementById('totalWorkouts').textContent = data.completed_workouts || 0;
+                document.getElementById('successRate').textContent = data.completion_rate || 0;
             }
+        } catch (err) { console.error(err); }
+    }
+
+    // === CARROUSEL ===
+    const editions = [
+        { active: true },
+        { active: false },
+        { active: false },
+        { active: false }
+    ];
+    let currentSlide = 0;
+
+    const track = document.getElementById('carouselTrack');
+    const dotsContainer = document.getElementById('carouselDots');
+    const btnGenerate = document.getElementById('btnGenerate');
+    const lockedMsg = document.getElementById('lockedMsg');
+
+    editions.forEach((_, i) => {
+        const dot = document.createElement('span');
+        dot.className = 'carousel-dot';
+        dot.onclick = () => goToSlide(i);
+        dotsContainer.appendChild(dot);
+    });
+
+    function goToSlide(n) {
+        currentSlide = (n + editions.length) % editions.length;
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+        document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+            dot.classList.toggle('dot-active', i === currentSlide);
+        });
+
+        if (editions[currentSlide].active) {
+            btnGenerate.classList.remove('hidden');
+            lockedMsg.classList.add('hidden');
+        } else {
+            btnGenerate.classList.add('hidden');
+            lockedMsg.classList.remove('hidden');
         }
+    }
 
-        // Charger l'historique des workouts
-        async function loadWorkouts() {
-            try {
-                const response = await fetch('http://localhost:8001/api/workouts/me/history', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+    document.getElementById('prevBtn').addEventListener('click', () => goToSlide(currentSlide - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => goToSlide(currentSlide + 1));
 
-                if (response.ok) {
-                    const data = await response.json();
-                    
-                    if (data.workouts.length === 0) {
-                        workoutsList.innerHTML = '<p class="no-workouts">Aucun workout pour le moment. Génère ton premier training maintenant!</p>';
-                    } else {
-                        workoutsList.innerHTML = data.workouts.map(w => `
-                            <div class="workout-item">
-                                <p>Workout du ${new Date(w.created_at).toLocaleDateString()}</p>
-                                <p>Points : ${w.total_points || 0}</p>
+    // === GÉNÉRER WORKOUT ===
+    btnGenerate.addEventListener('click', async () => {
+        btnGenerate.disabled = true;
+        btnGenerate.textContent = 'Génération en cours...';
+        try {
+            const response = await fetch('http://localhost:8001/api/workouts/generate', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.ok) {
+                const workout = await response.json();
+                window.location.href = `workout.html?id=${workout.id}`;
+            } else {
+                alert('Erreur lors de la génération du workout');
+                btnGenerate.disabled = false;
+                btnGenerate.textContent = 'Générer le workout du jour 🔥';
+            }
+        } catch (err) {
+            alert('Erreur réseau');
+            btnGenerate.disabled = false;
+            btnGenerate.textContent = 'Générer le workout du jour 🔥';
+        }
+    });
+
+    // === HISTORIQUE ===
+    let historyLoaded = false;
+    const historyList = document.getElementById('historyList');
+    const historyArrow = document.getElementById('historyArrow');
+
+    document.getElementById('btnHistory').addEventListener('click', async () => {
+        const isHidden = historyList.classList.contains('hidden');
+        if (isHidden) {
+            historyList.classList.remove('hidden');
+            historyArrow.textContent = '▲';
+            if (!historyLoaded) {
+                historyList.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:1rem;">Chargement...</p>';
+                await loadHistory();
+                historyLoaded = true;
+            }
+        } else {
+            historyList.classList.add('hidden');
+            historyArrow.textContent = '▼';
+        }
+    });
+
+    async function loadHistory() {
+        try {
+            const response = await fetch('http://localhost:8001/api/workouts/me/history?completed_only=true', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.workouts.length === 0) {
+                    historyList.innerHTML = '<p style="color:#94a3b8;text-align:center;padding:1rem;">Aucun training complété pour l\'instant.</p>';
+                    return;
+                }
+                historyList.innerHTML = data.workouts.map(w => {
+                    const tags = w.exercises && w.exercises.length > 0
+                        ? w.exercises.map(e => `<span class="history-exercise-tag">${e.exercise.name}</span>`).join('')
+                        : '<span style="color:#64748b;font-size:0.85rem;">Détails non disponibles</span>';
+                    return `
+                        <div class="history-item">
+                            <div class="history-item-header">
+                                <span class="history-date">📅 ${new Date(w.created_at).toLocaleDateString('fr-FR')}</span>
+                                <span class="history-points">+${w.total_points} pts 💪</span>
                             </div>
-                        `).join('');
-                    }
-                }
-            } catch (err) {
-                console.error('Erreur workouts:', err);
+                            <div class="history-exercises">${tags}</div>
+                        </div>
+                    `;
+                }).join('');
             }
-        }
+        } catch (err) { console.error(err); }
+    }
 
-        // Générer un nouveau workout
-        btnGenerate.addEventListener('click', async () => {
-            try {
-                const response = await fetch('http://localhost:8001/api/workouts/generate', {
-                    method: 'POST',
-                    headers: { 
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
+    // === LOGOUT ===
+    document.getElementById('btnLogout').addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('token');
+        window.location.href = 'login.html';
+    });
 
-                if (response.ok) {
-                    const workout = await response.json();
-                    window.location.href = `workout.html?id=${workout.id}`;
-                } else {
-                    alert('Erreur lors de la génération du workout');
-                }
-            } catch (err) {
-                alert('Erreur réseau');
-            }
-        });
-
-        // Déconnexion
-        btnLogout.addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('token');
-            window.location.href = 'login.html';
-        });
-
-        // Charger les données au démarrage
-        loadStats();
-        loadWorkouts();
+    loadStats();
+    goToSlide(0);
     </script>
 </body>
 </html>

@@ -133,7 +133,12 @@ def get_user_workout_history(db: Session, user_id: int, completed_only: bool = F
         query = query.filter(Workout.is_completed == True)
     
     workouts = query.order_by(Workout.created_at.desc()).all()
-    
+
+    for workout in workouts:
+        for w_ex in workout.workout_exercises:
+            _ = w_ex.exercise
+        workout.exercises = workout.workout_exercises
+
     total = len(workouts)
     completed = sum(1 for w in workouts if w.is_completed)
     pending = total - completed

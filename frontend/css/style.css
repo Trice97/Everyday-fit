@@ -370,7 +370,254 @@ body {
 .hidden {
     display: none;
 }
-/* Dashboard - Stats Section */
+/* ================================
+   DASHBOARD - Stats Bar
+   ================================ */
+.stats-bar-section {
+    background-color: #1e293b;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid #334155;
+}
+
+.stats-bar {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+}
+
+.stat-item .stat-label {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-weight: normal;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 28px;
+    background-color: #475569;
+    flex-shrink: 0;
+}
+
+/* ================================
+   DASHBOARD - Carrousel éditions
+   ================================ */
+.editions-section {
+    padding: 3rem 0 2rem;
+    background-color: #111827;
+    text-align: center;
+}
+
+.carousel-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+    padding: 0 1rem;
+}
+
+.carousel-btn {
+    background-color: #1e293b;
+    border: 2px solid #475569;
+    color: white;
+    font-size: 2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+.carousel-btn:hover {
+    border-color: #60a5fa;
+    color: #60a5fa;
+}
+
+.carousel-viewport {
+    overflow: hidden;
+    flex: 1;
+    border-radius: 15px;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.4s ease;
+}
+
+.edition-card {
+    min-width: 100%;
+    padding: 2.5rem 2rem;
+    border-radius: 15px;
+    border: 2px solid #475569;
+    background-color: #1e293b;
+    box-sizing: border-box;
+}
+
+.edition-active {
+    border-color: #10b981;
+    background-color: #064e3b;
+}
+
+.edition-locked {
+    opacity: 0.6;
+}
+
+.edition-badge {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-bottom: 1.2rem;
+    background-color: #10b981;
+    color: white;
+}
+
+.edition-locked .edition-badge {
+    background-color: #475569;
+}
+
+.edition-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #60a5fa;
+    margin-bottom: 0.8rem;
+}
+
+.edition-desc {
+    color: #cbd5e1;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+}
+
+.carousel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #475569;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.dot-active {
+    background-color: #60a5fa;
+    width: 26px;
+    border-radius: 5px;
+}
+
+.locked-msg {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+}
+
+/* ================================
+   DASHBOARD - Historique
+   ================================ */
+.history-section {
+    padding: 2rem 0 4rem;
+    background-color: #1e293b;
+}
+
+.container-history {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.btn-history {
+    width: 100%;
+    background-color: #334155;
+    border: 1px solid #475569;
+    color: white;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.btn-history:hover {
+    background-color: #3d5068;
+}
+
+.history-list {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.history-item {
+    background-color: #111827;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+}
+
+.history-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.history-date {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+.history-points {
+    color: #10b981;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.history-exercises {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.history-exercise-tag {
+    background-color: #1e293b;
+    color: #60a5fa;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: 1px solid #334155;
+}
+
+/* Dashboard - Stats Section (ancien - conservé) */
 .stats-section {
     padding: 3rem 0;
     background-color: #1e293b;
