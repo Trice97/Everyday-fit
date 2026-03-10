@@ -81,6 +81,11 @@ def get_workout_by_id(db: Session, workout_id: int):
     workout = db.query(Workout).filter(Workout.id == workout_id).first()
     if not workout:
         raise HTTPException(status_code=404, detail="Workout introuvable")
+
+    for w_ex in workout.workout_exercises:
+        _ = w_ex.exercise  # force SQLAlchemy à charger la relation
+
+    workout.exercises = workout.workout_exercises
     return workout
 
 
@@ -89,12 +94,16 @@ def get_workout_by_id(db: Session, workout_id: int):
 # ==========================================
 
 
-def complete_workout(db: Session, workout_id: int, data: WorkoutComplete):
+def complete_workout(db: Session, workout_id: int):
     """Marque un workout comme terminé"""
-
     workout = get_workout_by_id(db, workout_id)
-    workout.is_completed = data.is_completed
-    workout.total_points += 100
+    workout.is_completed = True
+    workout.total_points = 100
+    
+    # Ajouter les points au user
+    user = db.query(User).filter(User.id == workout.user_id).first()
+    user.total_points += 100
+    
     db.commit()
     db.refresh(workout)
     return workout
@@ -135,4 +144,3 @@ def get_user_workout_history(db: Session, user_id: int, completed_only: bool = F
         "completed": completed,
         "pending": pending
     }
-
