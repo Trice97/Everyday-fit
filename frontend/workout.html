@@ -12,17 +12,36 @@
             <h1 class="logo"><a href="index.html" style="color:white; text-decoration: none;">Everyday Fit</a></h1>
             <ul class="nav-links">
                 <li><a href="dashboard.html">Retour Dashboard</a></li>
-            </ul>    
+            </ul>
         </div>
     </nav>
-    
+
     <section class="workout-section">
         <div class="container">
             <h2 class="section-title" id="workoutTitle">Ton workout du jour</h2>
             <p class="workout-subtitle">Complète les 3 exercices pour gagner 100 points 🔥</p>
-        
-            <div id="exercisesContainer" class="exercises-container"></div>
-        
+
+            <!-- Slot machine -->
+            <div id="slotMachine" class="slot-machine">
+                <p class="slot-message" id="slotMessage">🎰 Génération de ton workout...</p>
+                <div class="slot-reels">
+                    <div class="slot-reel" id="reel-0">
+                        <div class="reel-label">Exercice 1</div>
+                        <div class="reel-text" id="reel-text-0">???</div>
+                    </div>
+                    <div class="slot-reel" id="reel-1">
+                        <div class="reel-label">Exercice 2</div>
+                        <div class="reel-text" id="reel-text-1">???</div>
+                    </div>
+                    <div class="slot-reel" id="reel-2">
+                        <div class="reel-label">Exercice 3</div>
+                        <div class="reel-text" id="reel-text-2">???</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="exercisesContainer" class="exercises-container hidden"></div>
+
             <button id="btnComplete" class="btn-complete hidden">
                 🔥 WORKOUT TERMINÉ ! +100 POINTS 🔥
             </button>
@@ -45,6 +64,53 @@
     let exercises = [];
     let currentExercise = 0;
 
+    const FAKE_NAMES = [
+        'Squats', 'Burpees', 'Pompes', 'Fentes', 'Gainage', 'Dips',
+        'Crunchs', 'Mountain Climbers', 'Jumping Jacks', 'Plank',
+        'Triceps', 'Biceps', 'Superman', 'Hip Thrust', 'Box Jump'
+    ];
+
+    function runSlotMachine(onComplete) {
+        const messages = [
+            '🎰 Génération de ton workout...',
+            '👀 Intéressant ce choix...',
+            '💪 Presque prêt...',
+            '🔥 C\'est parti !'
+        ];
+        const slotMsg = document.getElementById('slotMessage');
+        const stopTimes = [1800, 2800, 3800];
+
+        // Lancer les 3 rouleaux
+        const intervals = [0, 1, 2].map(i => {
+            const el = document.getElementById(`reel-text-${i}`);
+            return setInterval(() => {
+                el.textContent = FAKE_NAMES[Math.floor(Math.random() * FAKE_NAMES.length)];
+            }, 80);
+        });
+
+        // Arrêter chaque rouleau un par un
+        stopTimes.forEach((delay, i) => {
+            setTimeout(() => {
+                clearInterval(intervals[i]);
+                const el = document.getElementById(`reel-text-${i}`);
+                el.textContent = exercises[i].exercise.name;
+                document.getElementById(`reel-${i}`).classList.add('reel-stopped');
+                slotMsg.textContent = messages[i + 1];
+            }, delay);
+        });
+
+        // Cacher le slot machine et afficher les cartes
+        setTimeout(() => {
+            const slot = document.getElementById('slotMachine');
+            slot.classList.add('slot-fadeout');
+            setTimeout(() => {
+                slot.classList.add('hidden');
+                exercisesContainer.classList.remove('hidden');
+                onComplete();
+            }, 500);
+        }, 4500);
+    }
+
     async function loadWorkout() {
         try {
             const response = await fetch(`http://localhost:8001/api/workouts/${workoutId}`, {
@@ -53,7 +119,13 @@
             if (response.ok) {
                 const workout = await response.json();
                 exercises = workout.exercises || [];
-                renderExercises();
+                if (exercises.length === 0) {
+                    document.getElementById('slotMachine').classList.add('hidden');
+                    exercisesContainer.classList.remove('hidden');
+                    exercisesContainer.innerHTML = '<p style="text-align:center; color:#94a3b8;">Impossible de charger les exercices.</p>';
+                    return;
+                }
+                runSlotMachine(() => renderExercises());
             } else {
                 alert('Impossible de charger le workout');
                 window.location.href = 'dashboard.html';
@@ -61,6 +133,20 @@
         } catch (err) {
             alert('Erreur réseau');
             window.location.href = 'dashboard.html';
+        }
+    }
+
+    function toggleVideo(index) {
+        const videoDiv = document.getElementById(`video-${index}`);
+        const btn = document.getElementById(`btn-video-${index}`);
+        if (videoDiv.classList.contains('hidden')) {
+            videoDiv.classList.remove('hidden');
+            videoDiv.querySelector('video').play();
+            btn.textContent = '▼ Masquer';
+        } else {
+            videoDiv.classList.add('hidden');
+            videoDiv.querySelector('video').pause();
+            btn.textContent = '▶ Montre moi';
         }
     }
 
@@ -74,15 +160,23 @@
             if (isCompleted) className += ' exercise-completed';
             if (isLocked) className += ' exercise-locked';
             const statusIcon = isCompleted ? '✅' : isLocked ? '🔒' : '💪';
-            const details = ex.reps ? `${ex.reps} répétitions` : `${ex.duration} secondes`;
+            const details = ex.target_reps ? `${ex.target_reps} répétitions` : `${ex.target_duration} secondes`;
+            const videoUrl = ex.exercise.gif_url ? `http://localhost:8001${ex.exercise.gif_url}` : null;
             return `
                 <div class="${className}">
                     <div class="exercise-header">
                         <div class="exercise-number">${index + 1}</div>
                         <div class="exercise-status">${statusIcon}</div>
                     </div>
-                    <h3 class="exercise-name">${ex.name}</h3>
+                    <h3 class="exercise-name">${ex.exercise.name}</h3>
                     <p class="exercise-details">${details}</p>
+                    <p class="exercise-description">${ex.exercise.description}</p>
+                    ${videoUrl ? `
+                        <button class="btn-show-video" id="btn-video-${index}" onclick="toggleVideo(${index})">▶ Montre moi</button>
+                        <div id="video-${index}" class="video-container hidden">
+                            <video src="${videoUrl}" loop muted playsinline></video>
+                        </div>
+                    ` : ''}
                     ${isActive ? `<button class="btn-exercise-done" onclick="completeExercise()">✓ Terminé</button>` : ''}
                     ${isCompleted ? `<p style="color: #10b981; font-weight: bold;">Complété ✓</p>` : ''}
                     ${isLocked ? `<p style="color: #6b7280;">Verrouillé 🔒</p>` : ''}
