@@ -3,182 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion - Everyday Fit</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>Everyday Fit — Connexion</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+        .logo {
+            font-family: Impact, 'Arial Black', sans-serif;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #fff;
+            margin-bottom: 2.5rem;
+            text-decoration: none;
+        }
+        .logo span { color: #CC0000; }
+
+        .tabs {
+            display: flex;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 6px 6px 0 0;
+            overflow: hidden;
+            border: 1px solid #1e1e1e;
+            border-bottom: none;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 0.9rem;
+            background: #111;
+            color: #444;
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: #1a1a1a;
+            color: #fff;
+            border-bottom: 2px solid #CC0000;
+        }
+
+        .form-card {
+            background: #1a1a1a;
+            border: 1px solid #1e1e1e;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+        }
+        .form-panel { display: none; }
+        .form-panel.active { display: block; }
+
+        .field { margin-bottom: 1.2rem; }
+        .field label {
+            display: block;
+            font-size: 0.72rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.4rem;
+        }
+        .field input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: #0a0a0a;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+        .field input:focus { outline: none; border-color: #CC0000; }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: #CC0000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-submit:hover { background: #EE0000; }
+
+        .msg {
+            font-size: 0.82rem;
+            margin-top: 1rem;
+            text-align: center;
+            min-height: 1rem;
+        }
+        .msg.error { color: #ff4444; }
+        .msg.success { color: #22c55e; }
+
+        .back-link {
+            margin-top: 2rem;
+            font-size: 0.78rem;
+            color: #333;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #555; }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <h1 class="logo"><a href="index.html" style="color:white; text-decoration: none;">Everyday Fit</a></h1>
-            <ul class="nav-links">
-                <li><a href="index.html">Accueil</a></li>
-            </ul>
-        </div>
-    </nav>
-    <!-- Choix initial-->
-    <section class="login-hero">
-        <div class="container">
-            <div class="login-content">
-                <h1 class="login-title">Alors prêt à se prendre en main?</h1>
-                <div class="choice-buttons">
-                    <button id="btnMotivated" class="btn-choice btn-motivated">Ouais bordel, Let's get FIT 💪</button>
-                    <button id="btnLazy" class="btn-choice btn-lazy">Ça m'est égal, flemme!🤷</button>   
-                </div>
-            </div>    
-        </div>    
-    </section>
 
-    <!-- Formulaire inscription (caché au départ) -->
-    <section id="registerForm" class="form-section hidden">
-        <div class="container">
-            <div class="form-container">
-                <h2 class="form-title">Inscris-toi, prendre soin de son physique c'est gratuit ici 💪</h2>
-                <form id="formRegister">
-                    <input type="text" id="username" class="form-input" placeholder="Nom d'utilisateur" required>
-                    <input type="email" id="email" class="form-input" placeholder="Email" required>
-                    <input type="password" id="password" class="form-input" placeholder="Mot de passe (8-20 caractères)" required>
-                    <button type="submit" class="btn-hero">Créer mon compte</button>
-                </form>
-                <p class="form-link">Déjà un compte ? <a href="#" id="linkLogin">Connecte-toi</a></p>
+    <a href="intro.html" class="logo">Everyday<span>Fit</span></a>
+
+    <div class="tabs">
+        <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Connexion</button>
+        <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Créer un compte</button>
+    </div>
+
+    <div class="form-card">
+
+        <!-- CONNEXION -->
+        <div class="form-panel active" id="panel-login">
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="login-email" placeholder="ton@email.com">
             </div>
-        </div>
-    </section>
-    <!-- Formulaire connexion (caché au départ) -->
-    <section id="loginForm" class="form-section hidden">
-        <div class="container">
-            <div class="form-container">
-                <h2 class="form-title">Connexion</h2>
-                <form id="formLogin">
-                    <input type="email" id="loginEmail" class="form-input" placeholder="Email" required>
-                    <input type="password" id="loginPassword" class="form-input" placeholder="Mot de passe" required>
-                    <button type="submit" class="btn-hero">Se connecter</button>
-                </form>
-                <p class="form-link">Pas encore de compte ? <a href="#" id="linkRegister">Inscris-toi</a></p>
+            <div class="field">
+                <label>Mot de passe</label>
+                <input type="password" id="login-password" placeholder="••••••••">
             </div>
+            <button class="btn-submit" onclick="doLogin()">Se connecter</button>
+            <p class="msg error" id="login-error"></p>
         </div>
-    </section>
+
+        <!-- INSCRIPTION -->
+        <div class="form-panel" id="panel-register">
+            <div class="field">
+                <label>Nom d'utilisateur</label>
+                <input type="text" id="reg-username" placeholder="tonpseudo">
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" id="reg-email" placeholder="ton@email.com">
+            </div>
+            <div class="field">
+                <label>Mot de passe <span style="color:#333">(8–20 caractères)</span></label>
+                <input type="password" id="reg-password" placeholder="••••••••">
+            </div>
+            <button class="btn-submit" onclick="doRegister()">Créer mon compte</button>
+            <p class="msg error" id="reg-error"></p>
+        </div>
+
+    </div>
+
+    <a href="intro.html" class="back-link">← Retour</a>
+
     <script>
-        /*//récupération des éléments
-        const btnMotivated = document.getElementById('btnMotivated');
-        const btnLazy = document.getElementById('btnLazy');
-        const loginHero = document.querySelector('.login-hero');
-        const linkLogin = document.getElementById('linkLogin');
-        const registerForm = document.getElementById('registerForm')
-        const loginFormSection = document.getElementById('loginForm');
-        const linkRegister = document.getElementById('linkRegister');
+    const API = 'http://localhost:8001/api';
 
-     // Clic sur "let's get FIT"
-    btnMotivated.addEventListener('click', () => {
-        loginHero.classList.add('hidden');
-        registerForm.classList.remove('hidden');
-    });
-    
-    // Lien "Connecte-toi"
-    linkLogin.addEventListener('click', (e) => {
-        e.preventDefault();
-        registerForm.classList.add('hidden');
-        loginFormSection.classList.remove('hidden');
-    });
-    
-    // Lien "Inscris-toi"
-    linkRegister.addEventListener('click', (e) => {
-        e.preventDefault();
-        loginFormSection.classList.add('hidden');
-        registerForm.classList.remove('hidden');
-    });
-    
-    // Clic sur "Flemme"
-    btnLazy.addEventListener('click', () => {
-        alert('Papa Swolio est deg... 😤 Allez, bouge-toi !');
-    });*/
-    //Récupération des éléments
-    const btnMotivated = document.getElementById('btnMotivated');
-    const btnLazy = document.getElementById('btnLazy');
-    const loginHero = document.querySelector('.login-hero');
-    const registerForm = document.getElementById('registerForm');
-    const loginFormSection = document.getElementById('loginForm');
-    const linkLogin = document.getElementById('linkLogin');
-    const linkRegister = document.getElementById('linkRegister');
-    
-    const formRegister = document.getElementById('formRegister');
-    const formLogin = document.getElementById('formLogin');
+    function switchTab(tab) {
+        document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+        document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+        document.getElementById('panel-login').classList.toggle('active', tab === 'login');
+        document.getElementById('panel-register').classList.toggle('active', tab === 'register');
+    }
 
-    // Clic sur "Let's get FIT"
-    btnMotivated.addEventListener('click', () => {
-        loginHero.classList.add('hidden');
-        registerForm.classList.remove('hidden');
-    });
+    async function doLogin() {
+        const email    = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+        const errEl    = document.getElementById('login-error');
+        errEl.textContent = '';
 
-    // Clic sur "Flemme"
-    btnLazy.addEventListener('click', () => {
-        alert('Papa Swolio est déçu... 😤 Allez, bouge-toi !');
-    });
+        if (!email || !password) { errEl.textContent = 'Remplis tous les champs.'; return; }
 
-    // Lien "Connecte-toi"
-    linkLogin.addEventListener('click', (e) => {
-        e.preventDefault();
-        registerForm.classList.add('hidden');
-        loginFormSection.classList.remove('hidden');
-    });
-
-    // Lien "Inscris-toi"
-    linkRegister.addEventListener('click', (e) => {
-        e.preventDefault();
-        loginFormSection.classList.add('hidden');
-        registerForm.classList.remove('hidden');
-    });
-
-    // INSCRIPTION
-    formRegister.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const username = document.getElementById('username').value;
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
+        const form = new FormData();
+        form.append('username', email);
+        form.append('password', password);
 
         try {
-            const response = await fetch('http://localhost:8001/api/users/', {
+            const res = await fetch(`${API}/auth/login`, { method: 'POST', body: form });
+            if (!res.ok) { errEl.textContent = 'Email ou mot de passe incorrect.'; return; }
+            const data = await res.json();
+            localStorage.setItem('token', data.access_token);
+
+            // Vérifie si le test de niveau a déjà été fait pour cet user
+            const me = await fetch(`${API}/auth/me`, {
+                headers: { 'Authorization': `Bearer ${data.access_token}` }
+            });
+            const user = await me.json();
+            const testDone = localStorage.getItem(`level_done_${user.id}`);
+            window.location.href = testDone ? 'dashboard.html' : 'level-test.html';
+        } catch (e) {
+            errEl.textContent = 'Erreur réseau.';
+        }
+    }
+
+    async function doRegister() {
+        const username = document.getElementById('reg-username').value.trim();
+        const email    = document.getElementById('reg-email').value.trim();
+        const password = document.getElementById('reg-password').value;
+        const errEl    = document.getElementById('reg-error');
+        errEl.textContent = '';
+
+        if (!username || !email || !password) { errEl.textContent = 'Remplis tous les champs.'; return; }
+
+        try {
+            const res = await fetch(`${API}/users/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, email, password })
             });
-
-            if (response.ok) {
-                alert('Compte créé ! Connecte-toi maintenant.');
-                registerForm.classList.add('hidden');
-                loginFormSection.classList.remove('hidden');
-            } else {
-                const error = await response.json();
-                alert('Erreur : ' + (error.detail || 'Inscription échouée'));
+            if (!res.ok) {
+                const err = await res.json();
+                errEl.textContent = err.detail || 'Erreur lors de la création.';
+                return;
             }
-        } catch (err) {
-            alert('Erreur réseau. Vérifie que le backend tourne !');
+            // Connexion automatique après inscription
+            const form = new FormData();
+            form.append('username', email);
+            form.append('password', password);
+            const loginRes  = await fetch(`${API}/auth/login`, { method: 'POST', body: form });
+            const loginData = await loginRes.json();
+            localStorage.setItem('token', loginData.access_token);
+            // Nouvel utilisateur → test de niveau obligatoire
+            window.location.href = 'level-test.html';
+        } catch (e) {
+            errEl.textContent = 'Erreur réseau.';
         }
-    });
+    }
 
-    // CONNEXION
-    formLogin.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-
-        try {
-            const response = await fetch('http://localhost:8001/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('token', data.access_token);
-                window.location.href = 'dashboard.html';
-            } else {
-                alert('Email ou mot de passe incorrect');
-            }
-        } catch (err) {
-            alert('Erreur réseau. Vérifie que le backend tourne !');
-        }
-    });
-</script>
+    // Déjà connecté ?
+    if (localStorage.getItem('token')) window.location.href = 'dashboard.html';
+    </script>
+</body>
+</html>
