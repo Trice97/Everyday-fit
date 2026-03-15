@@ -179,9 +179,9 @@
     </div>
 
     <!-- Overlay vidéo Papa Swolio -->
-    <div class="video-overlay" id="videoOverlay">
+    <div class="video-overlay" id="videoOverlay" onclick="closeVideo()">
         <button class="skip-btn" onclick="closeVideo()">✕ Fermer</button>
-        <video id="swolio-video" autoplay playsinline>
+        <video id="swolio-video" playsinline onclick="event.stopPropagation()">
             <!-- Change le nom du fichier si besoin -->
             <source src="videos/papa-swolio.mp4" type="video/mp4">
         </video>

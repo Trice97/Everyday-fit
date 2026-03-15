@@ -3,27 +3,15 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 from jose import JWTError
 
-from app.database import SessionLocal
 from app.models.user import User
 from app.services.auth_service import decode_access_token
+from app.dependencies.database import get_db
 
 
 # =========================================
 # Sécurité HTTP Bearer
 # =========================================
 security = HTTPBearer()
-
-
-# =========================================
-# Dépendance DB
-# =========================================
-def get_db():
-    """ouvre une session DB pour chaque requête"""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 
 # =========================================
