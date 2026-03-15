@@ -30,6 +30,7 @@ EXERCISES = [
     
     # ==============================
     # UPPER — Niveau 3 (Avancé)
+    # ==============================
     {"name": "Archer Push-up",          "body_part": BodyPart.UPPER, "difficulty": 3, "reps": 8,  "description": "Pompes asymétriques — une bras tendu sur le côté, l'autre fléchi. Très exigeant."},
     {"name": "Chest Tap Push-up",       "body_part": BodyPart.UPPER, "difficulty": 3, "reps": 8,  "description": "Pompe explosive, tu te frappes la poitrine au point haut."},
     {"name": "Clap Push-up",            "body_part": BodyPart.UPPER, "difficulty": 3, "reps": 6,  "description": "Pompe pliométrique avec applaudissement en l'air. Force et explosivité."},
