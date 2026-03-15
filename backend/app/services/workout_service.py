@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.sql import func
 from fastapi import HTTPException
 from app.models.workout import Workout, WorkoutExercise
-from app.models.exercise import Exercise
+from app.models.exercise import Exercise, BodyPart
 from app.models.user import User
 from app.schemas.workout import WorkoutComplete
 
@@ -13,19 +14,29 @@ from app.schemas.workout import WorkoutComplete
 # CREATE
 # ==========================================
 def generate_workout(db: Session, user_id: int):
-    """Generation automatique d'un training selon le niveau de difficulté selectionné par l'utilisateur"""
+    """Generation automatique d'un training selon le niveau de difficulté selectionné par l'utilisateur.
+    Slot 1 = UPPER  |  Slot 2 = CORE  |  Slot 3 = LOWER  — chacun random."""
 
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="Utilisateur introuvable")
 
-    # selection d'exercice selon la difficulté selectionné par le user
-    exercises = (
-        db.query(Exercise)
-        .filter(Exercise.difficulty == user.difficulty_level)
-        .limit(3)
-        .all()
-    )
+    def pick(body_part):
+        return (
+            db.query(Exercise)
+            .filter(
+                Exercise.difficulty == user.difficulty_level,
+                Exercise.body_part == body_part,
+            )
+            .order_by(func.random())
+            .first()
+        )
+
+    upper = pick(BodyPart.UPPER)
+    core  = pick(BodyPart.CORE)
+    lower = pick(BodyPart.LOWER)
+
+    exercises = [ex for ex in [upper, core, lower] if ex is not None]
 
     if not exercises:
         raise HTTPException(status_code=404, detail="Aucun exercice trouvé")

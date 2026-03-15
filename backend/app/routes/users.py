@@ -3,8 +3,12 @@ from sqlalchemy.orm import Session
 from app.dependencies.database import get_db
 from app.services import user_service
 from app.dependencies.auth import get_current_user
-from app.models.user import User
+from app.models.user import User, DifficultyLevel
 from app.schemas.user import UserCreate, UserResponse, UserUpdate, PasswordChange, UserStats
+from pydantic import BaseModel
+
+class LevelUpdate(BaseModel):
+    difficulty_level: int  # 1, 2 ou 3
 
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -27,6 +31,24 @@ def get_my_stats(
 ):
     """Récupère les statistiques de l'utilisateur connecté"""
     return user_service.get_user_stats(db, current_user.id)
+
+
+# ==========================================
+# UPDATE LEVEL - Après le test de niveau
+# ==========================================
+@router.put("/me/level")
+def update_my_level(
+    data: LevelUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Sauvegarde le niveau déterminé par le test"""
+    if data.difficulty_level not in [1, 2, 3]:
+        raise HTTPException(status_code=400, detail="Niveau invalide (1, 2 ou 3)")
+    current_user.difficulty_level = DifficultyLevel(data.difficulty_level)
+    db.commit()
+    db.refresh(current_user)
+    return {"difficulty_level": current_user.difficulty_level}
 
 
 # ==========================================
