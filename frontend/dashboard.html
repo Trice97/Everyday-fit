@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everyday Fit — Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        /* NAV */
+        nav {
+            background: #000;
+            border-bottom: 2px solid #1a1a1a;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            font-family: Impact, 'Arial Black', sans-serif;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #fff;
+            text-decoration: none;
+        }
+        .nav-logo span { color: #CC0000; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        .nav-username {
+            font-size: 0.85rem;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .btn-logout {
+            font-size: 0.8rem;
+            color: #333;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: color 0.2s;
+        }
+        .btn-logout:hover { color: #CC0000; }
+
+        /* MAIN */
+        main {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        /* Greeting */
+        .greeting {
+            margin-bottom: 2.5rem;
+        }
+        .greeting h1 {
+            font-family: Impact, 'Arial Black', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            line-height: 1.1;
+        }
+        .greeting h1 span { color: #CC0000; }
+        .greeting p {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #444;
+        }
+
+        /* Level badge */
+        .level-card {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-left: 4px solid #CC0000;
+            border-radius: 5px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .level-label {
+            font-size: 0.72rem;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 0.3rem;
+        }
+        .level-value {
+            font-family: Impact, 'Arial Black', sans-serif;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #fff;
+        }
+        .level-change {
+            font-size: 0.75rem;
+            color: #333;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            transition: color 0.2s;
+        }
+        .level-change:hover { color: #555; }
+
+        /* Stats mini */
+        .stats-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .stat-box {
+            flex: 1;
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 5px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .stat-box .val {
+            font-family: Impact, 'Arial Black', sans-serif;
+            font-size: 2rem;
+            color: #CC0000;
+        }
+        .stat-box .lbl {
+            font-size: 0.7rem;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 0.2rem;
+        }
+
+        /* Section title */
+        .section-label {
+            font-size: 0.7rem;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #141414;
+        }
+
+        /* Editions */
+        .editions-wrapper {
+            margin-bottom: 2.5rem;
+        }
+        .carousel-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .carousel-btn {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            color: #444;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+        .carousel-btn:hover { border-color: #CC0000; color: #fff; }
+        .carousel-viewport { overflow: hidden; flex: 1; border-radius: 5px; }
+        .carousel-track { display: flex; transition: transform 0.35s ease; }
+
+        .edition-card {
+            min-width: 100%;
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 5px;
+            padding: 1.5rem;
+            box-sizing: border-box;
+        }
+        .edition-card.active { border-color: #CC0000; }
+        .edition-card.locked { opacity: 0.4; }
+
+        .edition-tag {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #CC0000;
+            margin-bottom: 0.5rem;
+        }
+        .edition-card.locked .edition-tag { color: #333; }
+        .edition-name {
+            font-family: Impact, 'Arial Black', sans-serif;
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.4rem;
+        }
+        .edition-desc { font-size: 0.85rem; color: #555; line-height: 1.5; }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #222;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .dot.active { background: #CC0000; width: 18px; border-radius: 3px; }
+
+        /* Generate button */
+        .btn-generate {
+            width: 100%;
+            padding: 1.3rem;
+            background: #CC0000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.2s;
+        }
+        .btn-generate:hover { background: #EE0000; }
+        .btn-generate:disabled { background: #1a1a1a; color: #333; cursor: not-allowed; }
+
+        .locked-notice {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #333;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        /* Historique */
+        .history-wrapper { margin-top: 2.5rem; }
+
+        .btn-history {
+            width: 100%;
+            background: #111;
+            border: 1px solid #1e1e1e;
+            color: #666;
+            padding: 0.9rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border-color 0.2s;
+        }
+        .btn-history:hover { border-color: #2a2a2a; color: #888; }
+
+        .history-list {
+            margin-top: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .history-item {
+            background: #111;
+            border: 1px solid #1a1a1a;
+            border-radius: 5px;
+            padding: 0.9rem 1.2rem;
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+        }
+        .history-date { font-size: 0.8rem; color: #444; }
+        .history-pts  { font-size: 0.8rem; color: #CC0000; font-weight: 700; }
+        .history-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .history-tag {
+            font-size: 0.72rem;
+            color: #555;
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 3px;
+            padding: 0.2rem 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="nav-logo">Everyday<span>Fit</span></a>
+        <div class="nav-right">
+            <span class="nav-username" id="navUsername"></span>
+            <button class="btn-logout" id="btnLogout">Déconnexion</button>
+        </div>
+    </nav>
+
+    <main>
+
+        <!-- Greeting -->
+        <div class="greeting">
+            <h1>Prêt à <span>t'entraîner</span> ?</h1>
+            <p id="greetDate"></p>
+        </div>
+
+        <!-- Niveau -->
+        <div class="level-card">
+            <div>
+                <div class="level-label">Ton niveau</div>
+                <div class="level-value" id="levelValue">—</div>
+            </div>
+            <a href="level-test.html" class="level-change">Refaire le test →</a>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <div class="val" id="statPts">0</div>
+                <div class="lbl">Points</div>
+            </div>
+            <div class="stat-box">
+                <div class="val" id="statDone">0</div>
+                <div class="lbl">Workouts</div>
+            </div>
+            <div class="stat-box">
+                <div class="val" id="statRate">0%</div>
+                <div class="lbl">Réussite</div>
+            </div>
+        </div>
+
+        <!-- Editions -->
+        <div class="editions-wrapper">
+            <p class="section-label">Éditions disponibles</p>
+            <div class="carousel-row">
+                <button class="carousel-btn" id="prevBtn">&#8249;</button>
+                <div class="carousel-viewport">
+                    <div class="carousel-track" id="carouselTrack">
+
+                        <div class="edition-card active">
+                            <div class="edition-tag">✓ Actif</div>
+                            <div class="edition-name">Bodyweight</div>
+                            <div class="edition-desc">Exercices au poids du corps, sans matériel, à domicile.</div>
+                        </div>
+
+                        <div class="edition-card locked">
+                            <div class="edition-tag">Bientôt</div>
+                            <div class="edition-name">Salle / Équipement</div>
+                            <div class="edition-desc">Machines, haltères, barres — programme gym complet.</div>
+                        </div>
+
+                        <div class="edition-card locked">
+                            <div class="edition-tag">Bientôt</div>
+                            <div class="edition-name">Fit-olympics</div>
+                            <div class="edition-desc">Défis entre utilisateurs, classements en temps réel.</div>
+                        </div>
+
+                        <div class="edition-card locked">
+                            <div class="edition-tag">Bientôt</div>
+                            <div class="edition-name">UNO Fit Edition</div>
+                            <div class="edition-desc">Jeu compétitif inspiré du UNO — sport et stratégie.</div>
+                        </div>
+
+                    </div>
+                </div>
+                <button class="carousel-btn" id="nextBtn">&#8250;</button>
+            </div>
+            <div class="carousel-dots" id="carouselDots"></div>
+
+            <button id="btnGenerate" class="btn-generate hidden">Générer mon workout →</button>
+            <p id="lockedNotice" class="locked-notice hidden">Cette édition n'est pas encore disponible</p>
+        </div>
+
+        <!-- Historique -->
+        <div class="history-wrapper">
+            <p class="section-label">Historique</p>
+            <button class="btn-history" id="btnHistory">
+                <span>Mes trainings complétés</span>
+                <span id="historyArrow">▼</span>
+            </button>
+            <div id="historyList" class="history-list hidden"></div>
+        </div>
+
+    </main>
+
+    <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'login.html';
+
+    const API = 'http://localhost:8001/api';
+
+    const LEVEL_NAMES = { 1: 'Débutant', 2: 'Intermédiaire', 3: 'Avancé', DEBUTANT: 'Débutant', INTERMEDIAIRE: 'Intermédiaire', AVANCE: 'Avancé' };
+
+    // Date du jour
+    document.getElementById('greetDate').textContent =
+        new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+
+    // === PROFIL + STATS ===
+    async function loadProfile() {
+        try {
+            const [meRes, statsRes] = await Promise.all([
+                fetch(`${API}/auth/me`,         { headers: { Authorization: `Bearer ${token}` } }),
+                fetch(`${API}/users/me/stats`,  { headers: { Authorization: `Bearer ${token}` } }),
+            ]);
+            const me    = await meRes.json();
+            const stats = await statsRes.json();
+
+            document.getElementById('navUsername').textContent = me.username;
+            document.getElementById('levelValue').textContent =
+                LEVEL_NAMES[me.difficulty_level] || me.difficulty_level;
+            document.getElementById('statPts').textContent  = stats.total_points || 0;
+            document.getElementById('statDone').textContent = stats.completed_workouts || 0;
+            document.getElementById('statRate').textContent = (stats.completion_rate || 0) + '%';
+        } catch (e) { console.error(e); }
+    }
+
+    // === CARROUSEL ===
+    const editions  = [{ active: true }, { active: false }, { active: false }, { active: false }];
+    let currentSlide = 0;
+
+    const track       = document.getElementById('carouselTrack');
+    const dotsEl      = document.getElementById('carouselDots');
+    const btnGenerate = document.getElementById('btnGenerate');
+    const lockedNotice = document.getElementById('lockedNotice');
+
+    editions.forEach((_, i) => {
+        const d = document.createElement('span');
+        d.className = 'dot';
+        d.onclick = () => goTo(i);
+        dotsEl.appendChild(d);
+    });
+
+    function goTo(n) {
+        currentSlide = (n + editions.length) % editions.length;
+        track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+        if (editions[currentSlide].active) {
+            btnGenerate.classList.remove('hidden');
+            lockedNotice.classList.add('hidden');
+        } else {
+            btnGenerate.classList.add('hidden');
+            lockedNotice.classList.remove('hidden');
+        }
+    }
+
+    document.getElementById('prevBtn').onclick = () => goTo(currentSlide - 1);
+    document.getElementById('nextBtn').onclick = () => goTo(currentSlide + 1);
+
+    // === GÉNÉRER WORKOUT ===
+    btnGenerate.addEventListener('click', async () => {
+        btnGenerate.disabled = true;
+        btnGenerate.textContent = 'Génération en cours...';
+        try {
+            const res = await fetch(`${API}/workouts/generate`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+            });
+            if (res.ok) {
+                const w = await res.json();
+                window.location.href = `workout.html?id=${w.id}`;
+            } else {
+                alert('Erreur lors de la génération');
+                btnGenerate.disabled = false;
+                btnGenerate.textContent = 'Générer mon workout →';
+            }
+        } catch (e) {
+            alert('Erreur réseau');
+            btnGenerate.disabled = false;
+            btnGenerate.textContent = 'Générer mon workout →';
+        }
+    });
+
+    // === HISTORIQUE ===
+    let historyLoaded = false;
+    const historyList = document.getElementById('historyList');
+
+    document.getElementById('btnHistory').addEventListener('click', async () => {
+        const hidden = historyList.classList.contains('hidden');
+        document.getElementById('historyArrow').textContent = hidden ? '▲' : '▼';
+        if (hidden) {
+            historyList.classList.remove('hidden');
+            if (!historyLoaded) {
+                historyList.innerHTML = '<p style="color:#333;font-size:0.8rem;padding:1rem 0;">Chargement...</p>';
+                await loadHistory();
+                historyLoaded = true;
+            }
+        } else {
+            historyList.classList.add('hidden');
+        }
+    });
+
+    async function loadHistory() {
+        try {
+            const res = await fetch(`${API}/workouts/me/history?completed_only=true`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (!res.ok) { historyList.innerHTML = '<p style="color:#333;font-size:0.8rem;padding:1rem 0;">Erreur de chargement.</p>'; return; }
+            const data = await res.json();
+            if (data.workouts.length === 0) {
+                historyList.innerHTML = '<p style="color:#333;font-size:0.8rem;padding:1rem 0;">Aucun training complété pour l\'instant.</p>';
+                return;
+            }
+            historyList.innerHTML = data.workouts.map(w => {
+                const tags = w.exercises && w.exercises.length
+                    ? w.exercises.map(e => `<span class="history-tag">${e.exercise.name}</span>`).join('')
+                    : '<span class="history-tag">—</span>';
+                return `
+                    <div class="history-item">
+                        <div class="history-header">
+                            <span class="history-date">${new Date(w.created_at).toLocaleDateString('fr-FR')}</span>
+                            <span class="history-pts">+${w.total_points} pts</span>
+                        </div>
+                        <div class="history-tags">${tags}</div>
+                    </div>`;
+            }).join('');
+        } catch (e) { console.error(e); }
+    }
+
+    // === LOGOUT ===
+    document.getElementById('btnLogout').addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = 'login.html';
+    });
+
+    loadProfile();
+    goTo(0);
+    </script>
+</body>
+</html>

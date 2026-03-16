@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <title>Everyday Fit</title>
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .splash {
+            text-align: center;
+            user-select: none;
+        }
+
+        .splash-subtitle {
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+            color: #666;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.5s forwards;
+        }
+
+        .splash-title {
+            font-family: Impact, 'Arial Black', sans-serif;
+            font-size: clamp(4rem, 14vw, 11rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            line-height: 1;
+            color: #fff;
+            opacity: 0;
+            animation: fadeIn 1.2s ease 0.2s forwards;
+        }
+
+        .splash-title span {
+            color: #CC0000;
+        }
+
+        .splash-tagline {
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+            color: #555;
+            margin-top: 2rem;
+            letter-spacing: 0.15em;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.2s forwards;
+        }
+
+        .splash-hint {
+            margin-top: 4rem;
+            font-family: Arial, sans-serif;
+            font-size: 0.85rem;
+            color: #333;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 1s ease 2s forwards, pulse 2s ease 2s infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50%       { opacity: 1; }
+        }
+
+        /* Transition de sortie */
+        body.exit .splash {
+            animation: exitAnim 0.6s ease forwards;
+        }
+
+        @keyframes exitAnim {
+            to { opacity: 0; transform: scale(1.05); }
+        }
+    </style>
+</head>
+<body onclick="enterSite()">
+
+    <div class="splash">
+        <p class="splash-subtitle">Bienvenue sur</p>
+        <h1 class="splash-title">Everyday<span>Fit</span></h1>
+        <p class="splash-tagline">Le site qui t'aide à te remettre au sport depuis chez toi</p>
+        <p class="splash-hint">— Cliquez pour entrer —</p>
+    </div>
+
+    <script>
+        function enterSite() {
+            document.body.classList.add('exit');
+            setTimeout(() => {
+                window.location.href = 'intro.html';
+            }, 600);
+        }
+    </script>
+</body>
+</html>

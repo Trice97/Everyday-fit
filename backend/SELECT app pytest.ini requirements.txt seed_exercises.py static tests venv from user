@@ -1,0 +1,11 @@
+ id | username |          email          |                       hashed_password                        | role | is_active |          created_at           | updated_at | difficulty_level | total_points 
+----+----------+-------------------------+--------------------------------------------------------------+------+-----------+-------------------------------+------------+------------------+--------------
+  7 | patrice  | tricepa@holberton.com   | $2b$12$R6Glp6O4k5wjHE7.lEeUSOZfdxginqCcH92dNgUqIyht0THzkgyqi | USER | t         | 2025-11-06 12:23:26.338394+01 |            | DEBUTANT         |            0
+ 14 | string   | user@example.com        | $2b$12$vKIzkxbksxxQRfT5OAITGOIMXDYiDs6v7UkFVBIpThYfPm.Vc72ty |      | t         | 2025-11-12 17:47:17.165657+01 |            | DEBUTANT         |            0
+ 15 | tricepa  | tricepa@fit.com         | $2b$12$TiSqGyrCcX6b8cCywr6kmu3zKDyaFoOi7peBR2iVYutj8lI.PCP8i |      | t         | 2025-11-13 14:38:18.710478+01 |            | DEBUTANT         |            0
+ 16 | tester   | tester001@example.com   | $2b$12$N0BKZbQRAozJvD7Sm5TtS.Fe8j8y6Ct4YW9.8DKL34VQXvKnQFdG6 |      | t         | 2025-11-14 00:03:40.138668+01 |            | DEBUTANT         |            0
+ 17 | Tricepa  | patrice@everydayfit.com | $2b$12$CSNzWacJly0oa0fMRm4AyONKTYpeb6qBFjd7vLNEouajmpF4k5Eam |      | t         | 2026-02-10 22:29:07.384318+01 |            | DEBUTANT         |            0
+ 18 | Trice97  | trice@holberton.com     | $2b$12$yVIjrymYPPuQkM0LwgsBB.x6.YcGU4ls0B0wDRiYK3Kwh8tcNZ21q |      | t         | 2026-02-10 23:02:20.055862+01 |            | DEBUTANT         |            0
+ 19 | trice97  | test@test.com           | $2b$12$YWvsnE28rRwxr4N4eV2C0.hWW.GdXJOFF8Y5iTAMRsfIShQn2Kk5a |      | t         | 2026-03-01 18:38:23.566933+01 |            | DEBUTANT         |            0
+(7 rows)
+

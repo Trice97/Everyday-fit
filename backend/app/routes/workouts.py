@@ -12,12 +12,25 @@ router = APIRouter(prefix="/workouts", tags=["Workouts"])
 # =============================================
 # CREATE - Génération automatique d’un workout
 # ===========================================
-@router.post("/generate/{user_id}", response_model=WorkoutResponse)
-def generate_workout(user_id: int, db: Session = Depends(get_db)):
-    """genere un nouvelk entrainemenr pour l'utilisateur"""
+@router.post("/generate", response_model=WorkoutResponse)
+def generate_workout(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """genere un nouvel entrainement pour l'utilisateur"""
+    return workout_service.generate_workout(db, current_user.id)
 
-    return workout_service.generate_workout(db, user_id)
-
+# ==========================================
+# WORKOUT HISTORY
+# ==========================================
+@router.get("/me/history", response_model=WorkoutHistory)
+def get_my_workout_history(
+    completed_only: bool = False,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Récupère l'historique des workouts de l'utilisateur connecté"""
+    return workout_service.get_user_workout_history(db, current_user.id, completed_only)
 
 # ==========================================
 # READ - Récupérer un workout par ID
@@ -33,11 +46,13 @@ def get_workout(workout_id: int, db: Session = Depends(get_db)):
 # ==========================================
 # UPDATE - Marquer un workout comme complété
 # ==========================================
-@router.put("/{workout_id}/complete", response_model=WorkoutResponse)
+@router.post("/{workout_id}/complete", response_model=WorkoutResponse)
 def complete_workout(
-    workout_id: int, data: WorkoutComplete, db: Session = Depends(get_db)
+    workout_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
-    return workout_service.complete_workout(db, workout_id, data)
+    return workout_service.complete_workout(db, workout_id)
 
 
 # ==========================================
@@ -47,14 +62,3 @@ def complete_workout(
 def delete_workout(workout_id: int, db: Session = Depends(get_db)):
     return workout_service.delete_workout(db, workout_id)
 
-# ==========================================
-# WORKOUT HISTORY
-# ==========================================
-@router.get("/me/history", response_model=WorkoutHistory)
-def get_my_workout_history(
-    completed_only: bool = False,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    """Récupère l'historique des workouts de l'utilisateur connecté"""
-    return workout_service.get_user_workout_history(db, current_user.id, completed_only)

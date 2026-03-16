@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everyday Fit — Ton niveau</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+
+        .logo {
+            font-family: Impact, 'Arial Black', sans-serif;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #fff;
+            margin-bottom: 3rem;
+        }
+        .logo span { color: #CC0000; }
+
+        /* Progress bar */
+        .progress-bar {
+            width: 100%;
+            max-width: 480px;
+            height: 3px;
+            background: #1a1a1a;
+            border-radius: 2px;
+            margin-bottom: 2.5rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #CC0000;
+            border-radius: 2px;
+            transition: width 0.4s ease;
+        }
+
+        /* Question */
+        .question-block {
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .question-num {
+            font-size: 0.72rem;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.8rem;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 2rem;
+            color: #eee;
+        }
+
+        .answers {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .answer-btn {
+            padding: 1rem 1.5rem;
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 5px;
+            color: #bbb;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .answer-btn:hover {
+            background: #1a1a1a;
+            border-color: #CC0000;
+            color: #fff;
+        }
+
+        /* Résultat */
+        .result-block {
+            display: none;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .result-label {
+            font-size: 0.72rem;
+            color: #444;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .result-level {
+            font-family: Impact, 'Arial Black', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #CC0000;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-desc {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            max-width: 360px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-go {
+            padding: 1.1rem 3rem;
+            background: #CC0000;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-go:hover {
+            background: #EE0000;
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo">Everyday<span>Fit</span></div>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+
+    <!-- Questions -->
+    <div class="question-block" id="questionBlock">
+        <p class="question-num" id="questionNum">Question 1 / 4</p>
+        <p class="question-text" id="questionText"></p>
+        <div class="answers" id="answers"></div>
+    </div>
+
+    <!-- Résultat -->
+    <div class="result-block" id="resultBlock">
+        <p class="result-label">Ton niveau</p>
+        <p class="result-level" id="resultLevel"></p>
+        <p class="result-desc" id="resultDesc"></p>
+        <button class="btn-go" onclick="goToDashboard()">Voir mon programme →</button>
+    </div>
+
+    <script>
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'login.html';
+
+    const QUESTIONS = [
+        {
+            text: "Tu fais du sport combien de fois par semaine en ce moment ?",
+            answers: [
+                { label: "Jamais ou presque",              score: 0 },
+                { label: "1 à 2 fois par semaine",         score: 1 },
+                { label: "3 fois ou plus par semaine",     score: 2 },
+            ]
+        },
+        {
+            text: "Combien de pompes tu peux enchaîner sans t'arrêter ?",
+            answers: [
+                { label: "Moins de 5",     score: 0 },
+                { label: "Entre 5 et 15",  score: 1 },
+                { label: "Plus de 15",     score: 2 },
+            ]
+        },
+        {
+            text: "Comment tu décris ton souffle lors d'un effort ?",
+            answers: [
+                { label: "Je suis vite essoufflé",                   score: 0 },
+                { label: "Correct, je tiens quelques minutes",        score: 1 },
+                { label: "Je gère bien, je peux tenir longtemps",     score: 2 },
+            ]
+        },
+        {
+            text: "Tu as déjà suivi un programme sportif ?",
+            answers: [
+                { label: "Non, jamais",                  score: 0 },
+                { label: "Oui, quelques fois",           score: 1 },
+                { label: "Oui, régulièrement",           score: 2 },
+            ]
+        },
+    ];
+
+    const LEVELS = {
+        1: {
+            name: "Débutant",
+            desc: "Pas de panique. On commence doucement, des exercices simples adaptés à toi. L'important c'est de bouger."
+        },
+        2: {
+            name: "Intermédiaire",
+            desc: "Tu as de la base. On va monter en intensité progressivement et te faire transpirer pour de vrai."
+        },
+        3: {
+            name: "Avancé",
+            desc: "T'es déjà dans le game. Des exercices exigeants pour continuer à progresser et repousser tes limites."
+        }
+    };
+
+    let currentQ = 0;
+    let totalScore = 0;
+    let userId = null;
+
+    // Récup userId
+    fetch('http://localhost:8001/api/auth/me', {
+        headers: { 'Authorization': `Bearer ${token}` }
+    }).then(r => r.json()).then(u => { userId = u.id; });
+
+    function renderQuestion() {
+        const q = QUESTIONS[currentQ];
+        document.getElementById('questionNum').textContent  = `Question ${currentQ + 1} / ${QUESTIONS.length}`;
+        document.getElementById('questionText').textContent = q.text;
+        document.getElementById('progressFill').style.width = `${(currentQ / QUESTIONS.length) * 100}%`;
+
+        const container = document.getElementById('answers');
+        container.innerHTML = q.answers.map((a, i) => `
+            <button class="answer-btn" onclick="pickAnswer(${a.score})">${a.label}</button>
+        `).join('');
+    }
+
+    function pickAnswer(score) {
+        totalScore += score;
+        currentQ++;
+        if (currentQ < QUESTIONS.length) {
+            renderQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    async function showResult() {
+        document.getElementById('progressFill').style.width = '100%';
+
+        // Score 0-2 → Débutant, 3-5 → Intermédiaire, 6-8 → Avancé
+        let level;
+        if (totalScore <= 2)      level = 1;
+        else if (totalScore <= 5) level = 2;
+        else                      level = 3;
+
+        // Sauvegarde le niveau via l'API
+        try {
+            await fetch('http://localhost:8001/api/users/me/level', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ difficulty_level: level })
+            });
+        } catch (e) { console.error(e); }
+
+        // Marque le test comme fait localement
+        if (userId) localStorage.setItem(`level_done_${userId}`, '1');
+
+        // Affiche le résultat
+        document.getElementById('questionBlock').style.display = 'none';
+        const resultBlock = document.getElementById('resultBlock');
+        resultBlock.style.display = 'block';
+        document.getElementById('resultLevel').textContent = LEVELS[level].name;
+        document.getElementById('resultDesc').textContent  = LEVELS[level].desc;
+    }
+
+    function goToDashboard() {
+        window.location.href = 'dashboard.html';
+    }
+
+    renderQuestion();
+    </script>
+</body>
+</html>
