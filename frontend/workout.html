@@ -489,7 +489,7 @@
         const btn      = document.getElementById(`btn-video-${index}`);
         const isHidden = videoDiv.classList.contains('hidden');
         videoDiv.classList.toggle('hidden', !isHidden);
-        if (isHidden) { videoDiv.querySelector('video').play(); btn.textContent = '▼ Masquer'; }
+        if (isHidden) { const v = videoDiv.querySelector('video'); v.playbackRate = 1.3; v.play(); btn.textContent = '▼ Masquer'; }
         else          { videoDiv.querySelector('video').pause(); btn.textContent = '▶ Voir le mouvement'; }
     }
 
@@ -504,7 +504,7 @@
             if (isLocked)    cls += ' exercise-locked';
             const statusIcon = isCompleted ? '✓' : isLocked ? '—' : '●';
             const details    = ex.target_reps ? `${ex.target_reps} répétitions` : `${ex.target_duration} secondes`;
-            const videoUrl   = ex.exercise.gif_url ? `${API.replace('/api','')}${ex.exercise.gif_url}` : null;
+            const videoUrl   = ex.exercise.gif_url ? `${API.replace('/api','')}${ex.exercise.gif_url}?v=2` : null;
 
             return `
             <div class="${cls}">

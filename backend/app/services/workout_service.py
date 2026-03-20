@@ -1,5 +1,5 @@
+import random
 from sqlalchemy.orm import Session
-from sqlalchemy.sql import func
 from fastapi import HTTPException
 from app.models.workout import Workout, WorkoutExercise
 from app.models.exercise import Exercise, BodyPart
@@ -22,15 +22,15 @@ def generate_workout(db: Session, user_id: int):
         raise HTTPException(status_code=404, detail="Utilisateur introuvable")
 
     def pick(body_part):
-        return (
+        candidates = (
             db.query(Exercise)
             .filter(
                 Exercise.difficulty == user.difficulty_level,
                 Exercise.body_part == body_part,
             )
-            .order_by(func.random())
-            .first()
+            .all()
         )
+        return random.choice(candidates) if candidates else None
 
     upper = pick(BodyPart.UPPER)
     core  = pick(BodyPart.CORE)
