@@ -135,9 +135,10 @@
         }
 
         .video-overlay video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 75%;
+            height: auto;
+            max-height: 85vh;
+            border-radius: 6px;
         }
 
         .video-overlay .skip-btn {
@@ -179,9 +180,9 @@
     </div>
 
     <!-- Overlay vidéo Papa Swolio -->
-    <div class="video-overlay" id="videoOverlay" onclick="closeVideo()">
+    <div class="video-overlay" id="videoOverlay" onclick="event.stopPropagation(); closeVideo()">
         <button class="skip-btn" onclick="closeVideo()">✕ Fermer</button>
-        <video id="swolio-video" playsinline onclick="event.stopPropagation()">
+        <video id="swolio-video" playsinline>
             <!-- Change le nom du fichier si besoin -->
             <source src="videos/papa-swolio.mp4" type="video/mp4">
         </video>
@@ -214,12 +215,16 @@
 
         setTimeout(typeNext, 600);
 
-        // Clic n'importe où sur la page → login (sauf les boutons et l'overlay)
+        // Clic n'importe où sur la page → skip l'animation (sauf boutons et overlay)
         document.body.addEventListener('click', function(e) {
             const overlay = document.getElementById('videoOverlay');
             if (overlay.classList.contains('active')) return;
             if (e.target.closest('#introButtons')) return;
-            window.location.href = 'login.html';
+            // Skip l'animation et affiche les boutons immédiatement
+            i = TEXT.length;
+            typed.textContent = TEXT;
+            cursor.style.display = 'none';
+            buttons.classList.add('visible');
         });
 
         // === Papa Swolio ===
